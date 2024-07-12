@@ -23,7 +23,7 @@ Uint8List vttFile=...;
 ...
 
 VideoPreviewThumbnails(
-    vtt: vttFile!,
+    vtt: vttFile,
     controller: controller,
 )
 
