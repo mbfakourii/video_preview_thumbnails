@@ -8,6 +8,7 @@ Video preview thumbnails base vtt file.
 * Load base vtt file
 * Handle image
 * Custom base image url
+* Custom loading and error handler
 
 ## Example App
 <img src="https://raw.githubusercontent.com/mbfakourii/video_preview_thumbnails/master/example/screenshots/example.gif" width="300" height="550" />
