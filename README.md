@@ -1,4 +1,4 @@
-![logo](https://github.com/user-attachments/assets/de47507d-1660-4977-850a-dd671882ee40)
+![logo](https://github.com/user-attachments/assets/e47b425d-0315-4a5b-a11c-cbb86940c375)
 
 # Video Preview Thumbnails
 
