@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
+/// Crop vtt image base x y w h.
 class VideoPreviewThumbnailsPainter extends CustomPainter {
   VideoPreviewThumbnailsPainter({
     required this.image,

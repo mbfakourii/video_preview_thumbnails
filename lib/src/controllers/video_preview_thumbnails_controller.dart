@@ -5,12 +5,16 @@ class VideoPreviewThumbnailsController
   VideoPreviewThumbnailsController()
       : super(const VideoPreviewThumbnailsValue(currentTimeMilliseconds: 0));
 
+  /// Set current time base milliseconds.
+  ///
+  /// The [currentTimeMilliseconds].
   void setCurrentTime(final int currentTimeMilliseconds) {
     value = value.copyWith(
       currentTimeMilliseconds: currentTimeMilliseconds,
     );
   }
 
+  /// Get current time base milliseconds
   int getCurrentTime() => value.currentTimeMilliseconds;
 }
 

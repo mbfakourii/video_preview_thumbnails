@@ -1,9 +1,19 @@
 import 'package:video_preview_thumbnails/video_preview_thumbnails.dart';
 
+/// Parse vtt model data from vtt string file.
+///
+/// The [data] is vtt string file.
 List<VttDataModel> parseFromWebVTTString(final String data) {
-  final List<VttDataModel> subtitles = <VttDataModel>[];
-  final Iterable<RegExpMatch> captions =
-      RegExp(_webVTTSegment).allMatches(data);
+  const String webVTTSegment = r'(?:(.+?)(?:\r\n?|\n))?'
+      r'(\d{2,}:)?(\d{2}:)(\d{2})\.(\d+)\s+-->\s+(\d{2,}:)?(\d{2}:)(\d{2})\.(\d+)\s*?([^\r\n]*?)(?:\r\n?|\n)'
+      r'(?<content>[^\0]*?)'
+      r'(?=(?:\r\n?|\n)*?(?:$|(?:.+?(?:\r\n?|\n))?.*?-->))';
+
+  const String webVTTVideoPreviewThumbnails = '(.*)#xywh=(.*),(.*),(.*),(.*)';
+
+  final Iterable<RegExpMatch> captions = RegExp(webVTTSegment).allMatches(data);
+
+  final List<VttDataModel> vttDataModelList = <VttDataModel>[];
 
   int subtitleNumber = 1;
 
@@ -17,9 +27,9 @@ List<VttDataModel> parseFromWebVTTString(final String data) {
       continue;
     }
     final Iterable<RegExpMatch> videoPreviewThumbnailsData =
-        RegExp(_webVTTVideoPreviewThumbnails).allMatches(text);
+        RegExp(webVTTVideoPreviewThumbnails).allMatches(text);
 
-    subtitles.add(
+    vttDataModelList.add(
       VttDataModel(
         number: int.tryParse(caption.group(1) ?? '') ?? subtitleNumber,
         start: start.inMilliseconds,
@@ -35,7 +45,7 @@ List<VttDataModel> parseFromWebVTTString(final String data) {
     subtitleNumber++;
   }
 
-  return subtitles;
+  return vttDataModelList;
 }
 
 Duration? _timestampToMillisecond(final List<String?> segments) {
@@ -54,10 +64,3 @@ Duration? _timestampToMillisecond(final List<String?> segments) {
     milliseconds: milliseconds,
   );
 }
-
-const String _webVTTSegment = r'(?:(.+?)(?:\r\n?|\n))?'
-    r'(\d{2,}:)?(\d{2}:)(\d{2})\.(\d+)\s+-->\s+(\d{2,}:)?(\d{2}:)(\d{2})\.(\d+)\s*?([^\r\n]*?)(?:\r\n?|\n)'
-    r'(?<content>[^\0]*?)'
-    r'(?=(?:\r\n?|\n)*?(?:$|(?:.+?(?:\r\n?|\n))?.*?-->))';
-
-const String _webVTTVideoPreviewThumbnails = '(.*)#xywh=(.*),(.*),(.*),(.*)';

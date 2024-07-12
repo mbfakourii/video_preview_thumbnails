@@ -5,14 +5,18 @@ class VttDataController {
       : _vttData = parseFromWebVTTString(fileContents);
   final String fileContents;
 
+  /// Get vtt data model list.
   List<VttDataModel> get vttData => _vttData;
 
   final List<VttDataModel> _vttData;
 
+  /// Check vttData list is empty.
   bool get isEmpty => vttData.isEmpty;
 
+  /// Check vttData list is not empty.
   bool get isNotEmpty => !isEmpty;
 
+  /// Get [VttDataModel] data from milliseconds.
   VttDataModel vttDataFromMilliseconds(final int milliseconds) {
     final VttDataModel selectedVttData = _vttData.lastWhere(
       (final VttDataModel data) =>
