@@ -1,4 +1,5 @@
-import 'package:example/vtt_data_model.dart';
+
+import 'package:video_preview_thumbnails/vtt_data_model.dart';
 
 List<VttDataModel> parseFromWebVTTString(String data) {
   final subtitles = <VttDataModel>[];

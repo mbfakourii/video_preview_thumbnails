@@ -1,63 +1,103 @@
-import 'package:flutter/material.dart';
-import 'dart:async';
+import 'dart:ui' as ui;
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_preview_thumbnails/video_preview_thumbnails.dart';
+import 'package:video_preview_thumbnails/video_preview_thumbnails_controller.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  Widget build(final BuildContext context) => MaterialApp(
+        title: 'Video preview thumbnails example',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const MyHomePage(title: 'Video preview thumbnails example'),
+      );
 }
 
-class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-  final _videoPreviewThumbnailsPlugin = VideoPreviewThumbnails();
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({required this.title, super.key});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  ui.Image? image;
+  Uint8List? vttFile;
+  VideoPreviewThumbnailsController controller =
+      VideoPreviewThumbnailsController();
 
   @override
   void initState() {
+    load();
     super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    // We also handle the message potentially returning null.
-    try {
-      platformVersion =
-          await _videoPreviewThumbnailsPlugin.getPlatformVersion() ?? 'Unknown platform version';
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
   }
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+  Widget build(final BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: Text(widget.title),
         ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+        body: Column(
+          children: <Widget>[
+            TextButton(
+              onPressed: () {
+                controller.setCurrentTime(1400);
+              },
+              child: const Text('1400'),
+            ),
+            TextButton(
+              onPressed: () {
+                controller.setCurrentTime(3);
+              },
+              child: const Text('3'),
+            ),
+            TextButton(
+              onPressed: () {
+                controller.setCurrentTime(50000);
+              },
+              child: const Text('50000'),
+            ),
+            TextButton(
+              onPressed: () {
+                controller.setCurrentTime(29000);
+              },
+              child: const Text('29000'),
+            ),
+            Container(
+              constraints: const BoxConstraints(maxHeight: 150, maxWidth: 300),
+              child: (vttFile != null)
+                  ? ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(12)),
+                      child: VideoPreviewThumbnails(
+                        vtt: vttFile!,
+                        controller: controller,
+                        scale: 5,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+          ],
         ),
-      ),
-    );
+      );
+
+  Future<Uint8List> loadVtt() async {
+    final ByteData data = await rootBundle.load('assets/tooltip.vtt');
+    return data.buffer.asUint8List();
+  }
+
+  Future<void> load() async {
+    vttFile = await loadVtt();
+    setState(() {});
   }
 }

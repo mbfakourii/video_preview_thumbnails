@@ -15,7 +15,7 @@ class VideoPreviewThumbnailsPainter extends CustomPainter {
   final int offsetY;
 
   @override
-  void paint(Canvas canvas, Size size) {
+  void paint(final Canvas canvas, final Size size) {
     canvas.drawImageRect(
       image,
       Rect.fromLTWH(
@@ -30,7 +30,5 @@ class VideoPreviewThumbnailsPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(VideoPreviewThumbnailsPainter oldDelegate) {
-    return true;
-  }
+  bool shouldRepaint(final VideoPreviewThumbnailsPainter oldDelegate) => true;
 }

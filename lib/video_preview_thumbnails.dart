@@ -1,23 +1,23 @@
 import 'dart:async';
 import 'dart:typed_data';
-
-import 'package:example/vtt_data_controller.dart';
-import 'package:example/vtt_data_model.dart';
-import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 import 'dart:ui' as ui;
-import 'video_preview_thumbnails_painter.dart';
-import 'video_preview_thumbnails_controller.dart';
+
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:video_preview_thumbnails/video_preview_thumbnails_controller.dart';
+import 'package:video_preview_thumbnails/video_preview_thumbnails_painter.dart';
+import 'package:video_preview_thumbnails/vtt_data_controller.dart';
+import 'package:video_preview_thumbnails/vtt_data_model.dart';
 
 class VideoPreviewThumbnails extends StatefulWidget {
   const VideoPreviewThumbnails({
-    super.key,
     required this.vtt,
+    required this.controller,
+    super.key,
     this.loading,
     this.error,
     this.baseUrlVttImages,
-    this.scale=1.0,
-    required this.controller,
+    this.scale = 1.0,
   });
 
   final VideoPreviewThumbnailsController controller;
@@ -32,16 +32,16 @@ class VideoPreviewThumbnails extends StatefulWidget {
 }
 
 class _VideoPreviewThumbnailsState extends State<VideoPreviewThumbnails> {
-  final List<VttDataModel> images = [];
+  final List<VttDataModel> images = <VttDataModel>[];
   VttDataModel currentVttData = VttDataModel.empty;
   late VttDataController vttDataController;
-  final dio = Dio();
+  final Dio dio = Dio();
 
   ui.Image? thumbnailsImage;
 
   @override
   void initState() {
-    String vttData = String.fromCharCodes(widget.vtt);
+    final String vttData = String.fromCharCodes(widget.vtt);
     vttDataController = VttDataController.string(vttData);
     currentVttData = vttDataController.vttDataFromMilliseconds(0);
 
@@ -61,29 +61,28 @@ class _VideoPreviewThumbnailsState extends State<VideoPreviewThumbnails> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return (thumbnailsImage != null)
-        ? CustomPaint(
-            painter: VideoPreviewThumbnailsPainter(
-              image: thumbnailsImage!,
-              sourceSize: Size(
-                currentVttData.w.toDouble(),
-                currentVttData.h.toDouble(),
-              ),
-              offsetX: currentVttData.x,
-              offsetY: currentVttData.y,
-            ),
-            size: Size(
+  Widget build(final BuildContext context) => (thumbnailsImage != null)
+      ? CustomPaint(
+          painter: VideoPreviewThumbnailsPainter(
+            image: thumbnailsImage!,
+            sourceSize: Size(
               currentVttData.w.toDouble(),
               currentVttData.h.toDouble(),
-            ) * widget.scale,
-          )
-        : const SizedBox.shrink();
-  }
+            ),
+            offsetX: currentVttData.x,
+            offsetY: currentVttData.y,
+          ),
+          size: Size(
+                currentVttData.w.toDouble(),
+                currentVttData.h.toDouble(),
+              ) *
+              widget.scale,
+        )
+      : const SizedBox.shrink();
 
-  Future<void> _getThumbnailImage(String url) async {
+  Future<void> _getThumbnailImage(final String url) async {
     // get image
-    final response = await dio.get(
+    final Response<List<int>> response = await dio.get<List<int>>(
       url,
       options: Options(responseType: ResponseType.bytes),
     );
@@ -91,19 +90,16 @@ class _VideoPreviewThumbnailsState extends State<VideoPreviewThumbnails> {
     // Convert to ui image
     try {
       thumbnailsImage = await loadImage(
-        response.data,
+        Uint8List.fromList(response.data!),
       );
-    } catch (e) {
-      print(e);
-    }
+    } catch (_) {}
+
     setState(() {});
   }
 
-  Future<ui.Image> loadImage(Uint8List img) async {
-    final Completer<ui.Image> completer = Completer();
-    ui.decodeImageFromList(img, (ui.Image img) {
-      return completer.complete(img);
-    });
+  Future<ui.Image> loadImage(final Uint8List img) async {
+    final Completer<ui.Image> completer = Completer<ui.Image>();
+    ui.decodeImageFromList(img, completer.complete);
     return completer.future;
   }
 }

@@ -5,7 +5,7 @@ class VideoPreviewThumbnailsController
   VideoPreviewThumbnailsController()
       : super(const VideoPreviewThumbnailsValue(currentTimeMilliseconds: 0));
 
-  void setCurrentTime(int currentTimeMilliseconds) {
+  void setCurrentTime(final int currentTimeMilliseconds) {
     value = value.copyWith(
       currentTimeMilliseconds: currentTimeMilliseconds,
     );
