@@ -10,12 +10,10 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(final BuildContext context) => MaterialApp(
+  Widget build(final BuildContext context) => const MaterialApp(
         title: 'Video preview thumbnails example',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const MyHomePage(title: 'Video preview thumbnails example'),
+        debugShowCheckedModeBanner: false,
+        home: MyHomePage(title: 'Video preview thumbnails example'),
       );
 }
 
