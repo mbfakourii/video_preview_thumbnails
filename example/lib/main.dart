@@ -1,9 +1,6 @@
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_preview_thumbnails/video_preview_thumbnails.dart';
-import 'package:video_preview_thumbnails/video_preview_thumbnails_controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +29,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  ui.Image? image;
   Uint8List? vttFile;
   VideoPreviewThumbnailsController controller =
       VideoPreviewThumbnailsController();
@@ -52,15 +48,15 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             TextButton(
               onPressed: () {
-                controller.setCurrentTime(1400);
-              },
-              child: const Text('1400'),
-            ),
-            TextButton(
-              onPressed: () {
                 controller.setCurrentTime(3);
               },
               child: const Text('3'),
+            ),
+            TextButton(
+              onPressed: () {
+                controller.setCurrentTime(1400);
+              },
+              child: const Text('1400'),
             ),
             TextButton(
               onPressed: () {
@@ -77,13 +73,10 @@ class _MyHomePageState extends State<MyHomePage> {
             Container(
               constraints: const BoxConstraints(maxHeight: 150, maxWidth: 300),
               child: (vttFile != null)
-                  ? ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(12)),
-                      child: VideoPreviewThumbnails(
-                        vtt: vttFile!,
-                        controller: controller,
-                        scale: 5,
-                      ),
+                  ? VideoPreviewThumbnails(
+                      vtt: vttFile!,
+                      controller: controller,
+                      scale: 5,
                     )
                   : const SizedBox.shrink(),
             ),

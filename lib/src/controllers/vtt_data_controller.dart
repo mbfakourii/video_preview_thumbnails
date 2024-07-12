@@ -1,5 +1,4 @@
-import 'package:video_preview_thumbnails/subtitle_utils.dart';
-import 'package:video_preview_thumbnails/vtt_data_model.dart';
+import 'package:video_preview_thumbnails/video_preview_thumbnails.dart';
 
 class VttDataController {
   VttDataController.string(this.fileContents)
