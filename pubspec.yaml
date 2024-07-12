@@ -8,9 +8,9 @@ issue_tracker: https://github.com/mbfakourii/video_preview_thumbnails/issues
 topics:
   - vtt
   - video-preview-thumbnails
-  - video
+  - sprites
   - preview
-  - thumbnails
+  - thumbnail
 
 environment:
   sdk: ">=2.17.0 <4.0.0"
@@ -26,3 +26,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+screenshots:
+  - description: Video preview thumbnails logo.
+    path: screenshots/logo.png
