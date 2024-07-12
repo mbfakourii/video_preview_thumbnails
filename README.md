@@ -32,6 +32,21 @@ VideoPreviewThumbnails(
 controller.setCurrentTime(1500);
 ```
 
+Sample vtt file support:
+
+```text
+WEBVTT
+
+00:00:00.000 --> 00:00:01.000
+https://example.com/media/coffee16.jpg#xywh=0,0,160,90
+
+00:00:01.000 --> 00:00:02.000
+https://example.com/media/coffee16.jpg#xywh=0,90,160,90
+
+00:00:02.000 --> 00:00:03.000
+https://example.com/media/coffee16.jpg#xywh=0,180,160,90
+```
+
 ## Getting Started
 
 For help getting started with Flutter, view our online
