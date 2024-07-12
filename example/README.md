@@ -1,6 +1,6 @@
 # video_preview_thumbnails_example
 
-Demonstrates how to use the video_preview_thumbnails plugin.
+A Flutter project for Video preview thumbnails.
 
 ## Getting Started
 

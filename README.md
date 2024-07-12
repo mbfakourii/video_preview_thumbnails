@@ -5,15 +5,23 @@
 [![pub package](https://img.shields.io/pub/v/video_preview_thumbnails.svg)](https://pub.dev/packages/video_preview_thumbnails)</br>
 Video preview thumbnails base vtt file
 
+## Example App
+<img src="https://raw.githubusercontent.com/mbfakourii/video_preview_thumbnails/master/example/screenshots/example.gif" width="300" height="550" />
+
 ## Usage
 
 Quick simple usage example:
 
 ```dart
-
 VideoPreviewThumbnailsController controller = VideoPreviewThumbnailsController();
+Uint8List vttFile=...;
 
+VideoPreviewThumbnails(
+    vtt: vttFile!,
+    controller: controller,
+)
 
+controller.setCurrentTime(1500);
 ```
 
 ## Getting Started

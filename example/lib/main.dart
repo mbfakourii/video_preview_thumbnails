@@ -46,39 +46,25 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body: Column(
           children: <Widget>[
-            TextButton(
-              onPressed: () {
-                controller.setCurrentTime(3);
-              },
-              child: const Text('3'),
-            ),
-            TextButton(
-              onPressed: () {
-                controller.setCurrentTime(1400);
-              },
-              child: const Text('1400'),
-            ),
-            TextButton(
-              onPressed: () {
-                controller.setCurrentTime(50000);
-              },
-              child: const Text('50000'),
-            ),
-            TextButton(
-              onPressed: () {
-                controller.setCurrentTime(29000);
-              },
-              child: const Text('29000'),
-            ),
-            Container(
-              constraints: const BoxConstraints(maxHeight: 150, maxWidth: 300),
-              child: (vttFile != null)
-                  ? VideoPreviewThumbnails(
-                      vtt: vttFile!,
-                      controller: controller,
-                      scale: 5,
-                    )
-                  : const SizedBox.shrink(),
+            _addMoveCurrentTime(15500),
+            _addMoveCurrentTime(21500),
+            _addMoveCurrentTime(18000),
+            _addMoveCurrentTime(29000),
+            _addMoveCurrentTime(39000),
+            _addMoveCurrentTime(49000),
+            const SizedBox(height: 20),
+            Center(
+              child: Container(
+                constraints:
+                    const BoxConstraints(maxHeight: 150, maxWidth: 300),
+                child: (vttFile != null)
+                    ? VideoPreviewThumbnails(
+                        vtt: vttFile!,
+                        controller: controller,
+                        scale: 5,
+                      )
+                    : const SizedBox.shrink(),
+              ),
             ),
           ],
         ),
@@ -93,4 +79,11 @@ class _MyHomePageState extends State<MyHomePage> {
     vttFile = await loadVtt();
     setState(() {});
   }
+
+  Widget _addMoveCurrentTime(final int value) => OutlinedButton(
+        onPressed: () {
+          controller.setCurrentTime(value);
+        },
+        child: Text('Move to $value Milliseconds'),
+      );
 }

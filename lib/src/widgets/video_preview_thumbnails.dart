@@ -13,7 +13,7 @@ class VideoPreviewThumbnails extends StatefulWidget {
     super.key,
     this.loading,
     this.error,
-    this.baseUrlVttImages,
+    this.baseUrlVttImages = '',
     this.scale = 1.0,
   });
 
@@ -21,7 +21,7 @@ class VideoPreviewThumbnails extends StatefulWidget {
   final Uint8List vtt;
   final Widget? loading;
   final Widget? error;
-  final String? baseUrlVttImages;
+  final String baseUrlVttImages;
   final double scale;
 
   @override
@@ -35,6 +35,8 @@ class _VideoPreviewThumbnailsState extends State<VideoPreviewThumbnails> {
   final Dio dio = Dio();
 
   ui.Image? thumbnailsImage;
+  bool hasError = false;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -58,43 +60,58 @@ class _VideoPreviewThumbnailsState extends State<VideoPreviewThumbnails> {
   }
 
   @override
-  Widget build(final BuildContext context) => (thumbnailsImage != null)
-      ? CustomPaint(
-          painter: VideoPreviewThumbnailsPainter(
-            image: thumbnailsImage!,
-            sourceSize: Size(
-              currentVttData.w.toDouble(),
-              currentVttData.h.toDouble(),
+  Widget build(final BuildContext context) => hasError
+      ? widget.error ??
+          const Center(
+            child: Icon(
+              Icons.error,
             ),
-            offsetX: currentVttData.x,
-            offsetY: currentVttData.y,
-          ),
-          size: Size(
-                currentVttData.w.toDouble(),
-                currentVttData.h.toDouble(),
-              ) *
-              widget.scale,
-        )
-      : const SizedBox.shrink();
+          )
+      : isLoading
+          ? widget.loading ??
+              const Center(
+                child: CircularProgressIndicator(),
+              )
+          : (thumbnailsImage != null)
+              ? CustomPaint(
+                  painter: VideoPreviewThumbnailsPainter(
+                    image: thumbnailsImage!,
+                    sourceSize: Size(
+                      currentVttData.w.toDouble(),
+                      currentVttData.h.toDouble(),
+                    ),
+                    offsetX: currentVttData.x,
+                    offsetY: currentVttData.y,
+                  ),
+                  size: Size(
+                        currentVttData.w.toDouble(),
+                        currentVttData.h.toDouble(),
+                      ) *
+                      widget.scale,
+                )
+              : const SizedBox.shrink();
 
   Future<void> _getThumbnailImage(final String url) async {
     // get image
-    final Response<List<int>> response = await dio.get<List<int>>(
-      url,
-      options: Options(responseType: ResponseType.bytes),
-    );
-
-    // Convert to ui image
     try {
-      thumbnailsImage = await loadImage(
+      final Response<List<int>> response = await dio.get<List<int>>(
+        widget.baseUrlVttImages + url,
+        options: Options(responseType: ResponseType.bytes),
+      );
+
+      // Convert to ui image
+      thumbnailsImage = await _loadUiImage(
         Uint8List.fromList(response.data!),
       );
-    } catch (_) {}
-
+    } catch (e) {
+      hasError = true;
+      debugPrint(e.toString());
+    }
+    isLoading = false;
     setState(() {});
   }
 
-  Future<ui.Image> loadImage(final Uint8List img) async {
+  Future<ui.Image> _loadUiImage(final Uint8List img) async {
     final Completer<ui.Image> completer = Completer<ui.Image>();
     ui.decodeImageFromList(img, completer.complete);
     return completer.future;
