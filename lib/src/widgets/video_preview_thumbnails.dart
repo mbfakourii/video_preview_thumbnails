@@ -142,7 +142,10 @@ class _VideoPreviewThumbnailsState extends State<VideoPreviewThumbnails> {
       debugPrint(e.toString());
     }
     isLoading = false;
-    setState(() {});
+
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<ui.Image> _loadUiImage(final Uint8List img) async {
