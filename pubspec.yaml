@@ -9,7 +9,7 @@ topics:
   - vtt
   - video-preview-thumbnails
   - sprites
-  - WebVTT
+  - web-vtt
   - thumbnail
 
 environment:
