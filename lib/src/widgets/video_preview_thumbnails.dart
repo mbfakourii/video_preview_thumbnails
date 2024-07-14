@@ -70,11 +70,13 @@ class _VideoPreviewThumbnailsState extends State<VideoPreviewThumbnails> {
 
     widget.controller.addListener(
       () {
-        setState(() {
-          currentVttData = vttDataController.vttDataFromMilliseconds(
-            widget.controller.getCurrentTime(),
-          );
-        });
+        if (mounted) {
+          setState(() {
+            currentVttData = vttDataController.vttDataFromMilliseconds(
+              widget.controller.getCurrentTime(),
+            );
+          });
+        }
       },
     );
 

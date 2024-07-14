@@ -1,6 +1,6 @@
 name: video_preview_thumbnails
 description: "Generate Video preview thumbnails using VTT files for enhanced video navigation and user experience"
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/mbfakourii/video_preview_thumbnails
 repository: https://github.com/mbfakourii/video_preview_thumbnails
 issue_tracker: https://github.com/mbfakourii/video_preview_thumbnails/issues
