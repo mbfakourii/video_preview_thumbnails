@@ -13,15 +13,38 @@ class VideoPreviewThumbnails extends StatefulWidget {
     super.key,
     this.loading,
     this.error,
+    this.empty,
     this.baseUrlVttImages = '',
     this.scale = 1.0,
   });
 
+  /// The controller responsible for managing and controlling the VideoPreviewThumbnails.
   final VideoPreviewThumbnailsController controller;
+
+  /// The raw data (binary) of the VTT file containing the information for the preview images.
   final Uint8List vtt;
+
+  /// The widget to display while the previews are loading.
+  ///
+  /// If this widget is not provided, a default loading indicator will be displayed.
   final Widget? loading;
+
+  /// The widget to display if there is an error loading the previews.
+  ///
+  /// If this widget is not provided, a default error indicator will be displayed.
   final Widget? error;
+
+  /// The widget to display if there are no preview images available.
+  ///
+  /// If this widget is not provided, a default empty indicator will be displayed.
+  final Widget? empty;
+
+  /// The base URL for the VTT images.
+  ///
+  /// This is used to construct the full URLs for the preview images.
   final String baseUrlVttImages;
+
+  /// The scale factor for the preview images.
   final double scale;
 
   @override
@@ -29,7 +52,6 @@ class VideoPreviewThumbnails extends StatefulWidget {
 }
 
 class _VideoPreviewThumbnailsState extends State<VideoPreviewThumbnails> {
-  final List<VttDataModel> images = <VttDataModel>[];
   VttDataModel currentVttData = VttDataModel.empty;
   late VttDataController vttDataController;
   final Dio dio = Dio();
@@ -73,21 +95,31 @@ class _VideoPreviewThumbnailsState extends State<VideoPreviewThumbnails> {
                 child: CircularProgressIndicator(),
               )
           : (thumbnailsImage != null)
-              ? CustomPaint(
-                  painter: VideoPreviewThumbnailsPainter(
-                    image: thumbnailsImage!,
-                    sourceSize: Size(
-                      currentVttData.w.toDouble(),
-                      currentVttData.h.toDouble(),
+              ? Stack(
+                  children: <Widget>[
+                    SizedBox.expand(
+                      child: widget.empty ??
+                          Container(
+                            color: Colors.black,
+                          ),
                     ),
-                    offsetX: currentVttData.x,
-                    offsetY: currentVttData.y,
-                  ),
-                  size: Size(
-                        currentVttData.w.toDouble(),
-                        currentVttData.h.toDouble(),
-                      ) *
-                      widget.scale,
+                    CustomPaint(
+                      painter: VideoPreviewThumbnailsPainter(
+                        image: thumbnailsImage!,
+                        sourceSize: Size(
+                          currentVttData.w.toDouble(),
+                          currentVttData.h.toDouble(),
+                        ),
+                        offsetX: currentVttData.x,
+                        offsetY: currentVttData.y,
+                      ),
+                      size: Size(
+                            currentVttData.w.toDouble(),
+                            currentVttData.h.toDouble(),
+                          ) *
+                          widget.scale,
+                    ),
+                  ],
                 )
               : const SizedBox.shrink();
 
