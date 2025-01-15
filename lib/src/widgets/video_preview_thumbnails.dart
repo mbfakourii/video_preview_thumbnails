@@ -10,6 +10,7 @@ class VideoPreviewThumbnails extends StatefulWidget {
   const VideoPreviewThumbnails({
     required this.vtt,
     required this.controller,
+    this.image,
     super.key,
     this.loading,
     this.error,
@@ -23,6 +24,10 @@ class VideoPreviewThumbnails extends StatefulWidget {
 
   /// The raw data (binary) of the VTT file containing the information for the preview images.
   final Uint8List vtt;
+
+  /// The thumbnail preview sprite image.
+  /// Will be fetched automatically from network if null
+  final ui.Image? image;
 
   /// The widget to display while the previews are loading.
   ///
@@ -66,7 +71,12 @@ class _VideoPreviewThumbnailsState extends State<VideoPreviewThumbnails> {
     vttDataController = VttDataController.string(vttData);
     currentVttData = vttDataController.vttDataFromMilliseconds(0);
 
-    _getThumbnailImage(vttDataController.vttData.first.imageUrl);
+    if (widget.image == null) {
+      _getThumbnailImage(vttDataController.vttData.first.imageUrl);
+    } else {
+      thumbnailsImage = widget.image;
+      isLoading = false;
+    }
 
     widget.controller.addListener(
       () {
