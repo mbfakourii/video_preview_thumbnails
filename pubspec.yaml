@@ -1,6 +1,6 @@
 name: video_preview_thumbnails
 description: "Generate Video preview thumbnails using VTT files for enhanced video navigation and user experience"
-version: 0.0.5
+version: 0.1.0
 homepage: https://github.com/mbfakourii/video_preview_thumbnails
 repository: https://github.com/mbfakourii/video_preview_thumbnails
 issue_tracker: https://github.com/mbfakourii/video_preview_thumbnails/issues
@@ -21,7 +21,7 @@ dependencies:
     sdk: flutter
 
   # Dio
-  dio: ^5.5.0+1
+  dio: ^5.7.0
 
 dev_dependencies:
   flutter_test:

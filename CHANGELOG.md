@@ -1,3 +1,7 @@
+## 0.1.0
+
+* Allow passing custom image object
+
 ## 0.0.5
 
 * Bug fix.
